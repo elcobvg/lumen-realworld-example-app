@@ -71,9 +71,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return \Jenssegers\Mongodb\Relations\BelongsToMany
      */
-    public function followers()
+    public function followedBy()
     {
-        return $this->belongsToMany(User::class, null, 'following', 'followers');
+        return $this->belongsToMany(User::class, null, 'followed_by', 'followers');
     }
 
     /**
@@ -81,9 +81,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return \Jenssegers\Mongodb\Relations\BelongsToMany
      */
-    public function following()
+    public function follows()
     {
-        return $this->belongsToMany(User::class, null, 'followers', 'following');
+        return $this->belongsToMany(User::class, null, 'followers', 'followed_by');
     }
 
     /**

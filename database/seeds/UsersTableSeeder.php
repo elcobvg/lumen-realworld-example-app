@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
 
             $num = $faker->numberBetween(1, 5);
             for ($i = 0; $i < $num; $i++) {
-                $user->followers()->attach($followers[$faker->numberBetween(0, sizeof($followers) - 1)]);
+                $user->followedBy()->attach($followers[$faker->numberBetween(0, sizeof($followers) - 1)]);
             }
             
             $this->command->info('Followers added');

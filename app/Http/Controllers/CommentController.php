@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
+use App\Http\Resources\CommentResource;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(string $slug)
     {
-        //
+        $article = Article::where('slug', $slug)->first();
+        return CommentResource::collection($article->comments);
     }
 
     /**
@@ -23,17 +27,6 @@ class CommentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
     {
         //
     }

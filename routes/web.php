@@ -41,23 +41,23 @@ $router->group(['prefix' => 'api'], function ($router) {
      */
     $router->get('articles', 'ArticleController@index');
     $router->get('articles/feed', 'ArticleController@feed');
-    $router->get('articles/{slug}', 'ArticleController@show');
+    $router->get('articles/{slug:[a-z-]+}', 'ArticleController@show');
     $router->post('articles', 'ArticleController@store');
-    $router->put('articles/{slug}', 'ArticleController@update');
-    $router->delete('articles/{slug}', 'ArticleController@destroy');
+    $router->put('articles/{slug:[a-z-]+}', 'ArticleController@update');
+    $router->delete('articles/{slug:[a-z-]+}', 'ArticleController@destroy');
 
     /**
      * Comments
      */
-    $router->post('articles/{slug}/comments', 'CommentController@store');
-    $router->get('articles/{slug}/comments', 'CommentController@index');
-    $router->delete('articles/{slug}/comments', 'CommentController@destroy');
+    $router->post('articles/{slug:[a-z-]+}/comments', 'CommentController@store');
+    $router->get('articles/{slug:[a-z-]+}/comments', 'CommentController@index');
+    $router->delete('articles/{slug:[a-z-]+}/comments', 'CommentController@destroy');
 
     /**
      * Favorites
      */
-    $router->post('articles/{slug}/favorite', 'ArticleController@addFavorite');
-    $router->delete('articles/{slug}/favorite', 'ArticleController@unFavorite');
+    $router->post('articles/{slug:[a-z-]+}/favorite', 'ArticleController@addFavorite');
+    $router->delete('articles/{slug:[a-z-]+}/favorite', 'ArticleController@unFavorite');
 
     /**
      * Tags

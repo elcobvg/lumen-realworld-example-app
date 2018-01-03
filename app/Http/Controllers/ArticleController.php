@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticleResource;
-use App\Http\Resources\ArticleCollection;
 
 class ArticleController extends Controller
 {
@@ -16,7 +15,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return new ArticleCollection(Article::all());
+        return ArticleResource::collection(Article::all());
     }
 
     /**
@@ -33,12 +32,13 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $slug)
     {
-        //
+        $article = Article::where('slug', $slug)->first();
+        return new ArticleResource($article);
     }
 
     /**
@@ -102,5 +102,10 @@ class ArticleController extends Controller
      */
     public function tags()
     {
+        $tags_raw = Article::all()->pluck('tags');
+        $names = $tags_raw->flatMap(function ($values) {
+            return $values->pluck('name');
+        });
+        return ['tags' => $names->unique()->sort()->values()->all()];
     }
 }
