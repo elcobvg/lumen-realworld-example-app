@@ -8,7 +8,7 @@
 
 This codebase was created to demonstrate a fully functional REST API built with **Lumen + MongoDB**, including CRUD operations, authentication, routing, pagination, and more.
 
-It borrows heavily from the excellent Laravel implementation by ...: https://github.com/gothinkster/laravel-realworld-example-app
+It borrows heavily from the [excellent Laravel implementation](https://github.com/gothinkster/laravel-realworld-example-app) by [Sandeesh](https://github.com/SandeeshS).
 
 For more information on how this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
