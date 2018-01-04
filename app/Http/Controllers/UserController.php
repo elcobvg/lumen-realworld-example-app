@@ -2,62 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * UserController constructor.
+     *
+     * @param UserTransformer $transformer
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Get the authenticated user.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return new UserResource(Auth::user());
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update the authenticated user and return the user if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
-        //
-    }
+        $user = Auth::user();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if ($request->has('user')) {
+            $user->update($request->get('user'));
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return new UserResource($user);
     }
 }

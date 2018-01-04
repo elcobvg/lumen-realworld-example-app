@@ -35,7 +35,7 @@ class ArticlesTableSeeder extends Seeder
             $users = App\Models\User::where('id', '<>', $author->id)->get();
             $num_favs = $faker->numberBetween(0, 10);
             for ($k = 0; $k < $num_favs; $k++) {
-                $article->favorites()->attach($users[$faker->numberBetween(0, sizeof($users) - 1)]);
+                $article->favorited()->attach($users[$faker->numberBetween(0, sizeof($users) - 1)]);
             }
 
             $article->save();

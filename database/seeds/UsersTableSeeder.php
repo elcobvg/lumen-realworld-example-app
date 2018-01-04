@@ -18,14 +18,13 @@ class UsersTableSeeder extends Seeder
         foreach ($users as $user) {
             $faker = Faker\Factory::create();
             
-            $followers = App\Models\User::where('id', '<>', $user->id)->get();
+            $others = App\Models\User::where('id', '<>', $user->id)->get();
 
             $num = $faker->numberBetween(1, 5);
             for ($i = 0; $i < $num; $i++) {
-                $user->followedBy()->attach($followers[$faker->numberBetween(0, sizeof($followers) - 1)]);
+                $user->follow($others[$faker->numberBetween(0, sizeof($others) - 1)]);
             }
-            
-            $this->command->info('Followers added');
         }
+        $this->command->info('Followers added');
     }
 }

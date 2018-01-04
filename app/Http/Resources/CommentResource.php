@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\Resource;
 
 class CommentResource extends Resource
@@ -45,8 +46,8 @@ class CommentResource extends Resource
     {
         $collection = parent::collection($resource)->collection;
         if ($collection->count() > 1) {
-            return ['comments' => $collection];
+            return [Str::plural(self::$wrap) => $collection];
         }
-        return ['comment' => $collection->first()];
+        return [self::$wrap => $collection->first()];
     }
 }

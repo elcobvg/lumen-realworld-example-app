@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use App\RealWorld\Slug\HasSlug;
+use App\RealWorld\Favorite\Favoritable;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class Article extends Model
 {
+    use HasSlug, Favoritable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,18 +31,6 @@ class Article extends Model
     protected $with = [
         'author'
     ];
-
-    /**
-     * Create a new Article instance.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->slug = $this->title ?: 'tmp';
-    }
 
     /**
      * Get the author of the article.
@@ -71,43 +63,32 @@ class Article extends Model
     }
 
     /**
-     * Get the users who favorited the article.
+     * Get the key name for route model binding.
      *
-     * @return \Jenssegers\Mongodb\Relations\BelongsToMany
+     * @return string
      */
-    public function favorites()
+    public function getRouteKeyName()
     {
-        return $this->belongsToMany(User::class, null, 'favorites', 'favorited_by');
+        return 'slug';
     }
 
     /**
-     * [setSlugAttribute description]
-     * @param string $value [description]
+     * Get the attribute name to slugify.
+     *
+     * @return string
      */
-    public function setSlugAttribute(string $value)
+    public function getSlugSourceColumn()
     {
-        $this->attributes['slug'] = $this->generateUniqueSlug($value);
+        return 'title';
     }
 
     /**
-     * [generateUniqueSlug description]
-     * @param  string $title [description]
-     * @return [type]        [description]
+     * Get list of values which are not allowed for this resource
+     *
+     * @return array
      */
-    private function generateUniqueSlug(string $title)
+    public function getBannedSlugValues()
     {
-        $temp = Str::slug($title, '-');
-        /*
-        if (Article::where('slug', 'exists', $temp)) {
-            $i = 1;
-            $newslug = $temp . '-' . $i;
-            while (Article::where('slug', 'exists', $newslug)) {
-                $i++;
-                $newslug = $temp . '-' . $i;
-            }
-            $temp =  $newslug;
-        }
-        */
-        return $temp;
+        return ['feed'];
     }
 }

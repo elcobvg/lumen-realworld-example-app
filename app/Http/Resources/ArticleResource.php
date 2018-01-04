@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\Resource;
 
 class ArticleResource extends Resource
@@ -49,9 +50,10 @@ class ArticleResource extends Resource
     public static function collection($resource)
     {
         $collection = parent::collection($resource)->collection;
+        $wrap = Str::plural(self::$wrap);
         return [
-            'articles'      => $collection,
-            'articlesCount' => $collection->count()
+            $wrap           => $collection,
+            $wrap . 'Count' => $collection->count()
         ];
     }
 }

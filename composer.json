@@ -33,6 +33,9 @@
         "classmap": [
             "tests/",
             "database/"
+        ],
+        "files": [
+            "app/Helpers/Helper.php"
         ]
     },
     "scripts": {

@@ -2,12 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticleResource;
+use App\RealWorld\Filters\ArticleFilter;
 
 class ArticleController extends Controller
 {
+    /** \App\RealWorld\Filters\ArticleFilter
+     *
+     * @var null
+     */
+    protected $filter;
+
+    /**
+     * ArticleController constructor.
+     *
+     * @param ArticleTransformer $transformer
+     */
+    public function __construct(ArticleFilter $filter)
+    {
+        $this->filter = $filter;
+
+        // $this->middleware('auth.api')->except(['index', 'show']);
+        // $this->middleware('auth.api:optional')->only(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +36,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return ArticleResource::collection(Article::all());
+        $articles = $this->filter->apply(Article::all());
+        return ArticleResource::collection($articles);
     }
 
     /**
@@ -71,7 +93,7 @@ class ArticleController extends Controller
      */
     public function feed()
     {
-        return Article::all();
+        return $this->respond(Article::all());
     }
 
 
@@ -106,6 +128,7 @@ class ArticleController extends Controller
         $names = $tags_raw->flatMap(function ($values) {
             return $values->pluck('name');
         });
-        return ['tags' => $names->unique()->sort()->values()->all()];
+        $tags = $names->unique()->sort()->values()->all();
+        return $this->respond(['tags' => $tags]);
     }
 }

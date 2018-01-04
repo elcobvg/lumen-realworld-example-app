@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
-use JWTAuth;
+use Auth;
+use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
 use Jenssegers\Mongodb\Eloquent\Model;
+use App\RealWorld\Follow\Followable;
+use App\RealWorld\Favorite\HasFavorite;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable, Authorizable, Followable, HasFavorite;
 
     /**
      * The attributes that are mass assignable.
@@ -37,14 +41,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     /**
-     * Generate a JWT token for the user.
-     *
-     * @return string
+     * JWT token string
+     * @var string
      */
-    public function getTokenAttribute()
-    {
-        return JWTAuth::fromUser($this);
-    }
+    protected $token;
 
     /**
      * Get all the articles by the user.
@@ -67,36 +67,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Get the users who follow this user.
-     *
-     * @return \Jenssegers\Mongodb\Relations\BelongsToMany
-     */
-    public function followedBy()
-    {
-        return $this->belongsToMany(User::class, null, 'followed_by', 'followers');
-    }
-
-    /**
-     * Get the users whom this user is following.
-     *
-     * @return \Jenssegers\Mongodb\Relations\BelongsToMany
-     */
-    public function follows()
-    {
-        return $this->belongsToMany(User::class, null, 'followers', 'followed_by');
-    }
-
-    /**
-     * Get the favorite articles of this user.
-     *
-     * @return \Jenssegers\Mongodb\Relations\BelongsToMany
-     */
-    public function favorites()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
-    /**
      * Get all the articles of the following users.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -106,5 +76,43 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $followingIds = $this->following()->pluck('id')->toArray();
 
         return Article::loadRelations()->whereIn('user_id', $followingIds);
+    }
+
+    /**
+     * Generate a JWT token for the user.
+     *
+     * @return string
+     */
+    public function getTokenAttribute()
+    {
+        // return JWTAuth::fromUser($this);
+        return Auth::guard()->tokenById($this->id);
+        // return $this->token;
+    }
+
+    /**
+     * Generate a JWT token for the user.
+     *
+     * @param string $token
+     */
+    public function setTokenAttribute(string $token)
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * @return int
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
