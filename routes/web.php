@@ -37,32 +37,39 @@ $router->group(['prefix' => 'api'], function ($router) {
     /**
      * User profile
      */
-    $router->get('profiles/{username}', 'ProfileController@show');
-    $router->post('profiles/{username}/follow', 'ProfileController@follow');
-    $router->delete('profiles/{username}/follow', 'ProfileController@unFollow');
+    $router->group(['prefix' => 'profiles/{username}'], function ($router) {
+        
+        $router->get('/', 'ProfileController@show');
+        $router->post('follow', 'ProfileController@follow');
+        $router->delete('follow', 'ProfileController@unFollow');
+    });
 
     /**
      * Articles
      */
     $router->get('articles', 'ArticleController@index');
-    $router->get('articles/feed', 'ArticleController@feed');
-    $router->get('articles/{slug:[a-z-]+}', 'ArticleController@show');
     $router->post('articles', 'ArticleController@store');
-    $router->put('articles/{slug:[a-z-]+}', 'ArticleController@update');
-    $router->delete('articles/{slug:[a-z-]+}', 'ArticleController@destroy');
+    $router->get('articles/feed', 'ArticleController@feed');
 
-    /**
-     * Comments
-     */
-    $router->post('articles/{slug:[a-z-]+}/comments', 'CommentController@store');
-    $router->get('articles/{slug:[a-z-]+}/comments', 'CommentController@index');
-    $router->delete('articles/{slug:[a-z-]+}/comments', 'CommentController@destroy');
+    $router->group(['prefix' => 'articles/{slug:[a-z-]+}'], function ($router) {
 
-    /**
-     * Favorites
-     */
-    $router->post('articles/{slug:[a-z-]+}/favorite', 'ArticleController@addFavorite');
-    $router->delete('articles/{slug:[a-z-]+}/favorite', 'ArticleController@unFavorite');
+        $router->get('/', 'ArticleController@show');
+        $router->put('/', 'ArticleController@update');
+        $router->delete('/', 'ArticleController@destroy');
+
+        /**
+         * Comments
+         */
+        $router->post('comments', 'CommentController@store');
+        $router->get('comments', 'CommentController@index');
+        $router->delete('comments', 'CommentController@destroy');
+
+        /**
+         * Favorites
+         */
+        $router->post('favorite', 'ArticleController@addFavorite');
+        $router->delete('favorite', 'ArticleController@unFavorite');
+    });
 
     /**
      * Tags
