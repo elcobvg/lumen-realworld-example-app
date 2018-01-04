@@ -9,6 +9,16 @@ use App\Http\Resources\CommentResource;
 class CommentController extends Controller
 {
     /**
+     * CommentController constructor.
+     *
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => 'index']);
+        $this->middleware('auth:optional', ['only' => 'index']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param  string  $slug

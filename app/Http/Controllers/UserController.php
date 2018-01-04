@@ -11,7 +11,6 @@ class UserController extends Controller
     /**
      * UserController constructor.
      *
-     * @param UserTransformer $transformer
      */
     public function __construct()
     {

@@ -10,6 +10,16 @@ use App\Http\Resources\ProfileResource;
 class ProfileController extends Controller
 {
     /**
+     * ProfileController constructor.
+     *
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => 'show']);
+        $this->middleware('auth:optional', ['only' => 'show']);
+    }
+
+    /**
      * Get the profile of the user given by their username
      *
      * @param User $user

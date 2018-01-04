@@ -26,6 +26,16 @@ class ArticleController extends Controller
     public function __construct(ArticleFilter $filter)
     {
         $this->filter = $filter;
+
+        $this->middleware('auth', ['except' => [
+            'index',
+            'show',
+            'tags'
+        ]]);
+        $this->middleware('auth:optional', ['only' => [
+            'index',
+            'show'
+        ]]);
     }
 
     /**
