@@ -31,25 +31,35 @@ $router->group(['prefix' => 'api'], function ($router) {
     /**
      * Current user
      */
-    $router->get('user', 'UserController@index');
-    $router->put('user', 'UserController@update');
+    $router->group(['middleware' => 'auth'], function ($router) {
+        $router->get('user', 'UserController@index');
+        $router->put('user', 'UserController@update');
+    });
 
     /**
      * User profile
      */
-    $router->get('profiles/{username}', 'ProfileController@show');
-    $router->post('profiles/{username}/follow', 'ProfileController@follow');
-    $router->delete('profiles/{username}/follow', 'ProfileController@unFollow');
+    $router->group(['middleware' => 'auth:optional'], function ($router) {
+        $router->get('profiles/{username}', 'ProfileController@show');
+    });
+    $router->group(['middleware' => 'auth'], function ($router) {
+        $router->post('profiles/{username}/follow', 'ProfileController@follow');
+        $router->delete('profiles/{username}/follow', 'ProfileController@unFollow');
+    });
 
     /**
      * Articles
      */
-    $router->get('articles', 'ArticleController@index');
-    $router->get('articles/feed', 'ArticleController@feed');
-    $router->get('articles/{slug:[a-z-]+}', 'ArticleController@show');
-    $router->post('articles', 'ArticleController@store');
-    $router->put('articles/{slug:[a-z-]+}', 'ArticleController@update');
-    $router->delete('articles/{slug:[a-z-]+}', 'ArticleController@destroy');
+    $router->group(['middleware' => 'auth'], function ($router) {
+        $router->get('articles/feed', 'ArticleController@feed');
+        $router->post('articles', 'ArticleController@store');
+        $router->put('articles/{slug:[a-z-]+}', 'ArticleController@update');
+        $router->delete('articles/{slug:[a-z-]+}', 'ArticleController@destroy');
+    });
+    $router->group(['middleware' => 'auth:optional'], function ($router) {
+        $router->get('articles', 'ArticleController@index');
+        $router->get('articles/{slug:[a-z-]+}', 'ArticleController@show');
+    });
 
     /**
      * Comments

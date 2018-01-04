@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
@@ -19,18 +21,15 @@ class ArticleController extends Controller
     /**
      * ArticleController constructor.
      *
-     * @param ArticleTransformer $transformer
+     * @param ArticleFilter $filter
      */
     public function __construct(ArticleFilter $filter)
     {
         $this->filter = $filter;
-
-        // $this->middleware('auth.api')->except(['index', 'show']);
-        // $this->middleware('auth.api:optional')->only(['index', 'show']);
     }
 
     /**
-     * Display a listing of the resource.
+     * Get all the articles.
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,18 +40,36 @@ class ArticleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new article and return the article if successful.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $article = Article::create([
+            'title' => $request->input('article.title'),
+            'description' => $request->input('article.description'),
+            'body' => $request->input('article.body'),
+        ]);
+
+        $user->articles()->save($article);
+
+        $inputTags = $request->input('article.tagList');
+
+        if ($inputTags && ! empty($inputTags)) {
+            foreach ($inputTags as $name) {
+                $article->tags()->attach(new Tag(['name' => $name]));
+            }
+        }
+
+        return new ArticleResource($article);
     }
 
     /**
-     * Display the specified resource.
+     * Get the article given by its slug.
      *
      * @param  string  $slug
      * @return \Illuminate\Http\Response
@@ -64,26 +81,34 @@ class ArticleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the article given by its slug and return the article if successful.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        //
+        if ($request->has('article')) {
+            $article = Article::where('slug', $slug)->first();
+            $article->update($request->get('article'));
+        }
+        return new ArticleResource($article);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(string $slug)
     {
-        //
+        if ($article = Article::where('slug', $slug)->first()) {
+            $article->delete();
+            return $this->respondSuccess();
+        }
+        return $this->respondNotFound();
     }
 
     /**
@@ -93,9 +118,10 @@ class ArticleController extends Controller
      */
     public function feed()
     {
-        return $this->respond(Article::all());
+        $following_ids = Auth::user()->following->pluck('id');
+        $articles = Article::whereIn('author_id', $following_ids)->get();
+        return ArticleResource::collection($articles);
     }
-
 
     /**
      * Favorite the article given by its slug and return the article if successful.

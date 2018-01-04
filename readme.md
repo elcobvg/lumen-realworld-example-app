@@ -10,7 +10,7 @@ This codebase was created to demonstrate a fully functional REST API built with 
 
 It borrows heavily from the excellent Laravel implementation by ...: https://github.com/gothinkster/laravel-realworld-example-app
 
-For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
+For more information on how this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 
 ----------
@@ -96,6 +96,7 @@ More information regarding the project can be found here https://github.com/goth
 
 ## Dependencies
 
+- [laravel-mongodb](https://github.com/jenssegers/laravel-mongodb) - MongoDB based Eloquent model and Query builder
 - [jwt-auth](https://github.com/tymondesigns/jwt-auth) - For authentication using JSON Web Tokens
 - [laravel-cors](https://github.com/barryvdh/laravel-cors) - For handling Cross-Origin Resource Sharing (CORS)
 
