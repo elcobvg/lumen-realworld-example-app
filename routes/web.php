@@ -62,7 +62,7 @@ $router->group(['prefix' => 'api'], function ($router) {
          */
         $router->post('comments', 'CommentController@store');
         $router->get('comments', 'CommentController@index');
-        $router->delete('comments', 'CommentController@destroy');
+        $router->delete('comments/{id:[a-z0-9]+}', 'CommentController@destroy');
 
         /**
          * Favorites

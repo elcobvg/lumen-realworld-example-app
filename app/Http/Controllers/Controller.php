@@ -76,28 +76,6 @@ class Controller extends BaseController
     }
 
     /**
-     * Respond with forbidden.
-     *
-     * @param string $message
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondForbidden($message = 'Forbidden')
-    {
-        return $this->respondError($message, 403);
-    }
-
-    /**
-     * Respond with not found.
-     *
-     * @param string $message
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondNotFound($message = 'Not Found')
-    {
-        return $this->respondError($message, 404);
-    }
-
-    /**
      * Respond with failed login.
      *
      * @return \Illuminate\Http\JsonResponse

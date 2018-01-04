@@ -7,11 +7,14 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use App\Helpers\GetsResources;
 use App\Http\Resources\ArticleResource;
 use App\RealWorld\Filters\ArticleFilter;
 
 class ArticleController extends Controller
 {
+    use GetsResources;
+
     /** \App\RealWorld\Filters\ArticleFilter
      *
      * @var null
@@ -57,15 +60,13 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
-
         $article = Article::create([
             'title' => $request->input('article.title'),
             'description' => $request->input('article.description'),
             'body' => $request->input('article.body'),
         ]);
 
-        $user->articles()->save($article);
+        Auth::user()->articles()->save($article);
 
         $inputTags = $request->input('article.tagList');
 
@@ -86,8 +87,7 @@ class ArticleController extends Controller
      */
     public function show(string $slug)
     {
-        $article = Article::where('slug', $slug)->first();
-        return new ArticleResource($article);
+        return new ArticleResource($this->getArticleBySlug($slug));
     }
 
     /**
@@ -100,7 +100,7 @@ class ArticleController extends Controller
     public function update(Request $request, $slug)
     {
         if ($request->has('article')) {
-            $article = Article::where('slug', $slug)->first();
+            $article = $this->getArticleBySlug($slug);
             $article->update($request->get('article'));
         }
         return new ArticleResource($article);
@@ -114,7 +114,7 @@ class ArticleController extends Controller
      */
     public function destroy(string $slug)
     {
-        if ($article = Article::where('slug', $slug)->first()) {
+        if ($article = $this->getArticleBySlug($slug)) {
             $article->delete();
             return $this->respondSuccess();
         }
@@ -136,21 +136,29 @@ class ArticleController extends Controller
     /**
      * Favorite the article given by its slug and return the article if successful.
      *
-     * @param Article $article
+     * @param  string  $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addFavorite(Article $article)
+    public function addFavorite(string $slug)
     {
+        $article = $this->getArticleBySlug($slug);
+        Auth::user()->favorite($article);
+
+        return new ArticleResource($article);
     }
 
     /**
      * Unfavorite the article given by its slug and return the article if successful.
      *
-     * @param Article $article
+     * @param  string  $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function unFavorite(Article $article)
+    public function unFavorite(string $slug)
     {
+        $article = $this->getArticleBySlug($slug);
+        Auth::user()->unFavorite($article);
+        
+        return new ArticleResource($article);
     }
 
     /**
