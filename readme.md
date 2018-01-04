@@ -6,9 +6,9 @@
 ### [Demo](https://github.com/gothinkster/realworld)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
 
-This codebase was created to demonstrate a fully fledged fullstack application built with **Lumen + MongoDB**, including CRUD operations, authentication, routing, pagination, and more.
+This codebase was created to demonstrate a fully functional REST API built with **Lumen + MongoDB**, including CRUD operations, authentication, routing, pagination, and more.
 
-We've gone to great lengths to adhere to the **Lumen and MongoDB** community styleguides & best practices.
+It borrows heavily from the excellent Laravel implementation by ...: https://github.com/gothinkster/laravel-realworld-example-app
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
@@ -113,7 +113,7 @@ More information regarding the project can be found here https://github.com/goth
 - `database/factories` - Contains the model factory for all the models
 - `database/migrations` - Contains all the database migrations
 - `database/seeds` - Contains the database seeder
-- `routes` - Contains all the api routes defined in api.php file
+- `routes` - Contains all the api routes defined in web.php file
 - `tests` - Contains all the application tests
 - `tests/Feature/Api` - Contains all the api tests
 
