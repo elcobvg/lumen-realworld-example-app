@@ -24,14 +24,14 @@ class Paginator
      * @param \Illuminate\Database\Eloquent\Collection $collection
      * @param int $page
      */
-    public function __construct(Collection $collection, $page = 1)
+    public function __construct(Collection $collection, $offset = 0)
     {
-        $offset = app('request')->get('page', $page) - 1;
+        $offset = app('request')->get('offset', $offset);
         $limit = app('request')->get('limit', $collection->first()->getPerPage());
         $this->total = $collection->count();
 
-        if (app('request')->has('page')) {
-            $collection = $collection->slice($offset * $limit, $limit)->values();
+        if (app('request')->has('offset')) {
+            $collection = $collection->slice($offset, $limit)->values();
         }
         $this->collection = $collection;
     }
