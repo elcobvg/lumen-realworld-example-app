@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use App\Http\Validators\ValidatesUserRequests;
 
 class UserController extends Controller
 {
+    use ValidatesUserRequests;
+
     /**
      * UserController constructor.
      *
@@ -35,6 +38,8 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+        $this->validateUpdate($request);
+
         $user = Auth::user();
 
         if ($request->has('user')) {

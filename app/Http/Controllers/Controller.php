@@ -65,25 +65,4 @@ class Controller extends BaseController
             ]
         ], 422);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function formatValidationErrors(Validator $validator)
-    {
-        if (isset(static::$errorFormatter)) {
-            return call_user_func(static::$errorFormatter, $validator);
-        }
-
-        $formattedErrors = [];
-        foreach ($validator->errors()->getMessages() as $key => $messages) {
-            $arr = explode('.', $key);
-            $key = array_pop($arr);
-            $formattedErrors[$key] = array_map(function ($msg) {
-                return preg_replace('/ [a-zA-Z ]+\.([a-z]+)/', ' ${1}', $msg);
-            }, $messages);
-        }
-
-        return $formattedErrors;
-    }
 }

@@ -26,12 +26,14 @@ class Paginator
      */
     public function __construct(Collection $collection, $offset = 0)
     {
-        $offset = app('request')->get('offset', $offset);
-        $limit = app('request')->get('limit', $collection->first()->getPerPage());
-        $this->total = $collection->count();
+        if (sizeof($collection)) {
+            $offset = app('request')->get('offset', $offset);
+            $limit = app('request')->get('limit', $collection->first()->getPerPage());
+            $this->total = $collection->count();
 
-        if (app('request')->has('offset')) {
-            $collection = $collection->slice($offset, $limit)->values();
+            if (app('request')->has('offset')) {
+                $collection = $collection->slice($offset, $limit)->values();
+            }
         }
         $this->collection = $collection;
     }

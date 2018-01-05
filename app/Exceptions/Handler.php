@@ -58,6 +58,19 @@ class Handler extends ExceptionHandler
                 ]), $e->getStatusCode());
         }
 
+        if ($e instanceof ValidationException) {
+            $formattedErrors = [];
+            foreach ($e->validator->errors()->getMessages() as $key => $messages) {
+                $arr = explode('.', $key);
+                $key = array_pop($arr);
+                $formattedErrors[$key] = array_map(function ($msg) {
+                    // return preg_replace('/ [a-zA-Z ]+\.([a-z]+)/', ' ${1}', $msg);
+                    return remove_words($msg, 2);
+                }, $messages);
+            }
+            return response()->json(['errors' => $formattedErrors], 422);
+        }
+
         return parent::render($request, $e);
     }
 }

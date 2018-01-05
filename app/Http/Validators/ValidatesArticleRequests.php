@@ -23,7 +23,7 @@ trait ValidatesArticleRequests
     }
 
     /**
-     * Validate new article request input
+     * Validate update article request input
      *
      * @param  Request $request
      * @throws \Illuminate\Auth\Access\ValidationException
