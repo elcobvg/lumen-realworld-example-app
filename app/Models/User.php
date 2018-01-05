@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use Auth;
-use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
@@ -85,19 +84,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getTokenAttribute()
     {
-        // return JWTAuth::fromUser($this);
-        return Auth::guard()->tokenById($this->id);
-        // return $this->token;
-    }
-
-    /**
-     * Generate a JWT token for the user.
-     *
-     * @param string $token
-     */
-    public function setTokenAttribute(string $token)
-    {
-        $this->token = $token;
+        return JWTAuth::fromUser($this);
     }
 
     /**

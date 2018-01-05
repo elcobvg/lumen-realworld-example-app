@@ -25,8 +25,6 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
-// $app->withEloquent();
-
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -47,18 +45,6 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
-
-// load application configurations
-$app->configure('app');
-
-// load authentication configurations
-$app->configure('auth');
-
-// load cors configurations
-$app->configure('cors');
-
-// load database configurations
-$app->configure('database');
 
 /*
 |--------------------------------------------------------------------------
