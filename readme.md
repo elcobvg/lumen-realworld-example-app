@@ -8,7 +8,7 @@
 
 This codebase was created to demonstrate a fully functional REST API built with **Lumen + MongoDB**, including CRUD operations, authentication, routing, pagination, and more.
 
-It borrows heavily from the [excellent Laravel implementation](https://github.com/gothinkster/laravel-realworld-example-app) by [Sandeesh](https://github.com/SandeeshS).
+It borrows heavily from the [excellent Laravel implementation](https://github.com/gothinkster/laravel-realworld-example-app) by [SandeeshS](https://github.com/SandeeshS).
 
 For more information on how this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
@@ -110,7 +110,7 @@ More information regarding the project can be found here https://github.com/goth
 - `app/RealWorld/Favorite` - Contains the files implementing the favorite feature
 - `app/RealWorld/Filters` - Contains the query filters used for filtering api requests
 - `app/RealWorld/Follow` - Contains the files implementing the follow feature
-- `app/RealWorld/Paginate` - Contains the pagination class used to paginate the result
+- `app/RealWorld/Paginator` - Contains the pagination class used to paginate the result
 - `app/RealWorld/Slug` - Contains the files implementing slugs to articles
 - `config` - Contains all the application configuration files
 - `database/factories` - Contains the model factory for all the models

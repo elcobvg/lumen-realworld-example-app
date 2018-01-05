@@ -43,6 +43,10 @@ class CommentController extends Controller
      */
     public function store(Request $request, string $slug)
     {
+        $this->validate($request, [
+            'comment.body' => 'required|string',
+        ]);
+
         $article = $this->getArticleBySlug($slug);
 
         $article->comments()->create([
@@ -68,6 +72,5 @@ class CommentController extends Controller
         if ($request->user()->can('delete-comment', $comment) && $comment->delete()) {
             return $this->respondSuccess();
         }
-        // throw error?
     }
 }

@@ -12,10 +12,11 @@ use App\RealWorld\Paginate\Paginator;
 use App\Http\Resources\ArticleResource;
 use App\RealWorld\Filters\ArticleFilter;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Validators\ValidatesArticleRequests;
 
 class ArticleController extends Controller
 {
-    use GetsResources;
+    use GetsResources, ValidatesArticleRequests;
 
     /** \App\RealWorld\Filters\ArticleFilter
      *
@@ -50,7 +51,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = $this->paginate(Article::all());
+        if (! $articles = $this->paginate(Article::all())) {
+            abort(404);
+        }
         return ArticleResource::collection($articles);
     }
 
@@ -62,6 +65,8 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validateNew($request);
+
         $article = Article::create([
             'title' => $request->input('article.title'),
             'description' => $request->input('article.description'),
@@ -89,7 +94,10 @@ class ArticleController extends Controller
      */
     public function show(string $slug)
     {
-        return new ArticleResource($this->getArticleBySlug($slug));
+        if (! $article = $this->getArticleBySlug($slug)) {
+            abort(404);
+        }
+        return new ArticleResource($article);
     }
 
     /**
@@ -101,6 +109,8 @@ class ArticleController extends Controller
      */
     public function update(Request $request, string $slug)
     {
+        $this->validateUpdate($request);
+
         if ($request->has('article')) {
             $article = $this->getArticleBySlug($slug);
             if ($request->user()->can('update-article', $article)) {
@@ -125,7 +135,7 @@ class ArticleController extends Controller
             }
             return $this->respondSuccess();
         }
-        return $this->respondNotFound();
+        abort(404);
     }
 
     /**

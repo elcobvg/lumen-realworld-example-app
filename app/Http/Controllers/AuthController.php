@@ -9,9 +9,12 @@ use App\Http\Requests\LoginUser;
 use App\Http\Requests\RegisterUser;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Validators\ValidatesAuthenticationRequests;
 
 class AuthController extends Controller
 {
+    use ValidatesAuthenticationRequests;
+    
     /**
      * Login user and return the user is successful.
      *
@@ -20,11 +23,8 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $this->validate($request, [
-            'user.email' => 'required|email|max:255',
-            'user.password' => 'required',
-        ]);
-        
+        $this->validateLogin($request);
+
         $credentials = $request->all()['user'];
 
         if (! Auth::once($credentials)) {
@@ -42,11 +42,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validate($request, [
-            'user.username' => 'required|max:50|alpha_num|unique:users,username',
-            'user.email' => 'required|email|max:255|unique:users,email',
-            'user.password' => 'required|min:8',
-        ]);
+        $this->validateRegister($request);
 
         $user = User::create([
             'username' => $request->input('user.username'),

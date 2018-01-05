@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Validator;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -53,29 +53,6 @@ class Controller extends BaseController
     }
 
     /**
-     * Respond with error.
-     *
-     * @param $message
-     * @param $statusCode
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondError($message, $statusCode = 422)
-    {
-        return $this->respond(['errors' => [ $message ]], $statusCode);
-    }
-
-    /**
-     * Respond with unauthorized.
-     *
-     * @param string $message
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondUnauthorized($message = 'Unauthorized')
-    {
-        return $this->respondError($message, 401);
-    }
-
-    /**
      * Respond with failed login.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -84,19 +61,29 @@ class Controller extends BaseController
     {
         return $this->respond([
             'errors' => [
-                'email or password' => 'is invalid',
+                'email or password' => ['is invalid'],
             ]
         ], 422);
     }
 
     /**
-     * Respond with internal error.
-     *
-     * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * {@inheritdoc}
      */
-    protected function respondInternalError($message = 'Internal Error')
+    protected function formatValidationErrors(Validator $validator)
     {
-        return $this->respondError($message, 500);
+        if (isset(static::$errorFormatter)) {
+            return call_user_func(static::$errorFormatter, $validator);
+        }
+
+        $formattedErrors = [];
+        foreach ($validator->errors()->getMessages() as $key => $messages) {
+            $arr = explode('.', $key);
+            $key = array_pop($arr);
+            $formattedErrors[$key] = array_map(function ($msg) {
+                return preg_replace('/ [a-zA-Z ]+\.([a-z]+)/', ' ${1}', $msg);
+            }, $messages);
+        }
+
+        return $formattedErrors;
     }
 }

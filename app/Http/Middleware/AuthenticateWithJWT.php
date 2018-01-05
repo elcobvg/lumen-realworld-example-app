@@ -35,34 +35,18 @@ class AuthenticateWithJWT extends BaseMiddleware
 
         try {
             if (! $user = $this->auth->parseToken('token')->authenticate()) {
-                return $this->respondError('JWT error: User not found');
+                abort(401, 'JWT error: User not found');
             }
         } catch (TokenExpiredException $e) {
-            return $this->respondError('JWT error: Token has expired');
+            abort(401, 'JWT error: Token has expired');
         } catch (TokenInvalidException $e) {
-            return $this->respondError('JWT error: Token is invalid');
+            abort(401, 'JWT error: Token is invalid');
         } catch (JWTException $e) {
             if ($optional === null) {
-                return $this->respondError('JWT error: Token is absent');
+                abort(401);
             }
         }
-
+        
         return $next($request);
-    }
-
-    /**
-     * Respond with json error message.
-     *
-     * @param $message
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondError($message)
-    {
-        return response()->json([
-            'errors' => [
-                'message' => $message,
-                'status_code' => 401
-            ]
-        ], 401);
     }
 }

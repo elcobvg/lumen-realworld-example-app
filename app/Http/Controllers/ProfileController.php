@@ -29,7 +29,10 @@ class ProfileController extends Controller
      */
     public function show($username)
     {
-        return new ProfileResource($this->getUserByName($username));
+        if (! $user = $this->getUserByName($username)) {
+            abort(404);
+        }
+        return new ProfileResource($user);
     }
 
     /**
