@@ -15,7 +15,7 @@ trait Favoritable
      */
     public function getFavoritedAttribute()
     {
-        if (! Auth::check()) {
+        if (! Auth::check() || ! $this->favorited_by_ids) {
             return false;
         }
         return in_array(Auth::user()->id, $this->favorited_by_ids, true);

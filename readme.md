@@ -3,7 +3,7 @@
 > ### Lumen + MongoDB codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
 
-### [Demo](https://github.com/gothinkster/realworld)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+### [Demo](https://lumen-realworld.herokuapp.com/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
 
 This codebase was created to demonstrate a fully functional REST API built with **Lumen + MongoDB**, including CRUD operations, authentication, routing, pagination, and more.
@@ -12,6 +12,7 @@ It borrows heavily from the [excellent Laravel implementation](https://github.co
 
 For more information on how this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
+Hope you'll find this example helpful. Pull requests are welcome!
 
 ----------
 
@@ -40,7 +41,7 @@ Copy the example env file and make the required configuration changes in the .en
 
 Generate a new application key
 
-    php artisan key:generate
+Since Lumen doesn't have the `php artisan key:generate` command, there's a custom route `http://localhost:8000/appKey` to help you generate an application key.
 
 Generate a new JWT authentication secret key
 
@@ -105,6 +106,7 @@ More information regarding the project can be found here https://github.com/goth
 - `app/Models` - Contains all the Eloquent models
 - `app/Http/Controllers` - Contains all the api controllers
 - `app/Http/Middleware` - Contains the JWT auth middleware
+- `app/Providers` - Contains the JWT auth service provider
 - `app/RealWorld/Favorite` - Contains the files implementing the favorite feature
 - `app/RealWorld/Filters` - Contains the query filters used for filtering api requests
 - `app/RealWorld/Follow` - Contains the files implementing the follow feature
@@ -159,7 +161,7 @@ This applications uses JSON Web Token (JWT) to handle authentication. The token 
 
 # Cross-Origin Resource Sharing (CORS)
  
-This applications has CORS enabled by default on all API endpoints. The default configuration allows requests from `http://localhost:3000` and `http://localhost:4200` to help speed up your frontend testing. The CORS allowed origins can be changed by setting them in the config file. Please check the following sources to learn more about CORS.
+This applications has CORS enabled by default on all API endpoints. The CORS allowed origins can be changed by setting them in the config file. Please check the following sources to learn more about CORS.
  
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 - https://en.wikipedia.org/wiki/Cross-origin_resource_sharing

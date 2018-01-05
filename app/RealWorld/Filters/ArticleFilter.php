@@ -32,9 +32,8 @@ class ArticleFilter extends Filter
      */
     protected function favorited($username)
     {
-        // TODO: apply other filters
         $user = User::whereUsername($username)->first();
-        return $user->favorites;
+        return $user->favorites->intersect($this->collection);
     }
 
     /**
@@ -46,7 +45,7 @@ class ArticleFilter extends Filter
      */
     protected function tag($name)
     {
-        // TODO: apply other filters
-        return Article::whereRaw(['tags.name' => $name])->get();
+        $articles = Article::whereRaw(['tags.name' => $name])->get();
+        return $articles->intersect($this->collection);
     }
 }

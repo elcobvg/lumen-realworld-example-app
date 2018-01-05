@@ -14,7 +14,7 @@ trait Followable
      */
     public function getFollowingAttribute()
     {
-        if (! Auth::check()) {
+        if (! Auth::check() || ! $this->follower_ids) {
             return false;
         }
         return in_array(Auth::user()->id, $this->follower_ids, true);

@@ -1,4 +1,13 @@
 <?php
+
+/*
+ * Custom JWT authentication service provider since the original package does
+ * not have a configurable option to change the authorization token name.
+ *
+ * The token name by default is set to 'bearer'.
+ * This project api spec requires us to use the token name 'token'.
+ */
+
 namespace App\Providers;
 
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;

@@ -8,8 +8,10 @@ use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Helpers\GetsResources;
+use App\RealWorld\Paginate\Paginator;
 use App\Http\Resources\ArticleResource;
 use App\RealWorld\Filters\ArticleFilter;
+use Illuminate\Database\Eloquent\Collection;
 
 class ArticleController extends Controller
 {
@@ -48,7 +50,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = $this->filter->apply(Article::all());
+        $articles = $this->paginate(Article::all());
         return ArticleResource::collection($articles);
     }
 
@@ -183,5 +185,17 @@ class ArticleController extends Controller
         });
         $tags = $names->unique()->sort()->values()->all();
         return $this->respond(['tags' => $tags]);
+    }
+
+    /**
+     * Paginate and filter the article collection
+     *
+     * @param  Collection $collection
+     * @return Collection
+     */
+    protected function paginate(Collection $collection)
+    {
+        $paginator = new Paginator($this->filter->apply($collection));
+        return $paginator->get();
     }
 }
