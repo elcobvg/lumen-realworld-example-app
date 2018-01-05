@@ -97,11 +97,13 @@ class ArticleController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update(Request $request, string $slug)
     {
         if ($request->has('article')) {
             $article = $this->getArticleBySlug($slug);
-            $article->update($request->get('article'));
+            if ($request->user()->can('update-article', $article)) {
+                $article->update($request->get('article'));
+            }
         }
         return new ArticleResource($article);
     }
@@ -109,13 +111,16 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $slug)
+    public function destroy(Request $request, string $slug)
     {
         if ($article = $this->getArticleBySlug($slug)) {
-            $article->delete();
+            if ($request->user()->can('delete-article', $article)) {
+                $article->delete();
+            }
             return $this->respondSuccess();
         }
         return $this->respondNotFound();
@@ -136,13 +141,16 @@ class ArticleController extends Controller
     /**
      * Favorite the article given by its slug and return the article if successful.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addFavorite(string $slug)
+    public function addFavorite(Request $request, string $slug)
     {
         $article = $this->getArticleBySlug($slug);
-        Auth::user()->favorite($article);
+        if ($request->user()->can('favorite-article', $article)) {
+            $request->user()->favorite($article);
+        }
 
         return new ArticleResource($article);
     }
@@ -157,6 +165,7 @@ class ArticleController extends Controller
     {
         $article = $this->getArticleBySlug($slug);
         Auth::user()->unFavorite($article);
+        $article->save();
         
         return new ArticleResource($article);
     }

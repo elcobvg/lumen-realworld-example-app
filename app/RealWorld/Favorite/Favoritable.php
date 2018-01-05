@@ -2,6 +2,7 @@
 
 namespace App\RealWorld\Favorite;
 
+use Auth;
 use App\Models\User;
 
 trait Favoritable
@@ -14,23 +15,10 @@ trait Favoritable
      */
     public function getFavoritedAttribute()
     {
-        if (! auth()->check()) {
+        if (! Auth::check()) {
             return false;
         }
-
-        if (! $this->relationLoaded('favorited')) {
-            $this->load(['favorited' => function ($query) {
-                $query->where('favorited_by_ids', auth()->id());
-            }]);
-        }
-
-        $favorited = $this->getRelation('favorited');
-
-        if (! empty($favorited) && $favorited->contains('id', auth()->id())) {
-            return true;
-        }
-
-        return false;
+        return in_array(Auth::user()->id, $this->favorited_by_ids, true);
     }
 
     /**

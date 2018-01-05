@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Auth;
 use Illuminate\Http\Resources\Json\Resource;
 
 class ProfileResource extends Resource
@@ -26,7 +25,7 @@ class ProfileResource extends Resource
             'username'  => $this->username,
             'bio'       => $this->bio,
             'image'     => $this->image,
-            'following' => $this->isFollowing(Auth::user()),
+            'following' => $this->getFollowingAttribute(),
         ];
     }
 }

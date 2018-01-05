@@ -65,9 +65,9 @@ class CommentController extends Controller
         $article = $this->getArticleBySlug($slug);
         $comment = $article->comments()->firstWhere('id', $id);
 
-        if ($comment->delete()) {
+        if ($request->user()->can('delete-comment', $comment) && $comment->delete()) {
             return $this->respondSuccess();
         }
-        // error?
+        // throw error?
     }
 }

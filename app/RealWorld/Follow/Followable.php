@@ -2,6 +2,7 @@
 
 namespace App\RealWorld\Follow;
 
+use Auth;
 use App\Models\User;
 
 trait Followable
@@ -13,23 +14,10 @@ trait Followable
      */
     public function getFollowingAttribute()
     {
-        if (! auth()->check()) {
+        if (! Auth::check()) {
             return false;
         }
-
-        if (! $this->relationLoaded('followers')) {
-            $this->load(['followers' => function ($query) {
-                $query->where('follower_ids', auth()->id());
-            }]);
-        }
-
-        $followers = $this->getRelation('followers');
-
-        if (! empty($followers) && $followers->contains('id', auth()->id())) {
-            return true;
-        }
-
-        return false;
+        return in_array(Auth::user()->id, $this->follower_ids, true);
     }
 
     /**

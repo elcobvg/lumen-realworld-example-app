@@ -30,13 +30,13 @@ class ArticleResource extends Resource
             'tagList'           => $this->tags->sortBy('name')->pluck('name'),
             'createdAt'         => $this->created_at->toAtomString(),
             'updatedAt'         => $this->updated_at->toAtomString(),
-            'favorited'         => !! $this->favorited, // TODO: check if favorited by current iser
+            'favorited'         => $this->getFavoritedAttribute(),
             'favoritesCount'    => $this->favoritesCount,
             'author' => [
                 'username'  => $this->author->username,
                 'bio'       => $this->author->bio,
                 'image'     => $this->author->image,
-                'following' => !! $this->author->following, // TODO: check if followed by current iser
+                'following' => $this->author->getFollowingAttribute(),
             ]
         ];
     }

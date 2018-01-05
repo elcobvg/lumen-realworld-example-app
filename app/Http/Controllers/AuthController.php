@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginUser;
 use App\Http\Requests\RegisterUser;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -50,7 +51,7 @@ class AuthController extends Controller
         $user = User::create([
             'username' => $request->input('user.username'),
             'email' => $request->input('user.email'),
-            'password' => $request->input('user.password'),
+            'password' => Hash::make($request->input('user.password')),
         ]);
 
         return new UserResource($user);
