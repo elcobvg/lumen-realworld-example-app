@@ -60,11 +60,12 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $slug
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $slug, string $id)
+    public function destroy(Request $request, string $slug, string $id)
     {
         $article = $this->getArticleBySlug($slug);
         $comment = $article->comments()->firstWhere('id', $id);
