@@ -40,12 +40,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     /**
-     * JWT token string
-     * @var string
-     */
-    protected $token;
-
-    /**
      * Get all the articles by the user.
      *
      * @return \Jenssegers\Mongodb\Relations\HasMany
@@ -72,9 +66,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function feed()
     {
-        $followingIds = $this->following()->pluck('id')->toArray();
-
-        return Article::loadRelations()->whereIn('user_id', $followingIds);
+        $followingIds = $this->following->pluck('id')->toArray();
+        return Article::whereIn('author_id', $followingIds)->get();
     }
 
     /**

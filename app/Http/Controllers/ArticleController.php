@@ -7,11 +7,11 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
-use App\Helpers\GetsResources;
 use App\RealWorld\Paginate\Paginator;
 use App\Http\Resources\ArticleResource;
 use App\RealWorld\Filters\ArticleFilter;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Controllers\Helpers\GetsResources;
 use App\Http\Validators\ValidatesArticleRequests;
 
 class ArticleController extends Controller
@@ -51,9 +51,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        if (! $articles = $this->paginate(Article::all())) {
-            abort(404);
-        }
+        $articles = $this->paginate(Article::all());
         return ArticleResource::collection($articles);
     }
 
@@ -129,13 +127,14 @@ class ArticleController extends Controller
      */
     public function destroy(Request $request, string $slug)
     {
-        if ($article = $this->getArticleBySlug($slug)) {
-            if ($request->user()->can('delete-article', $article)) {
-                $article->delete();
-            }
-            return $this->respondSuccess();
+        if (! $article = $this->getArticleBySlug($slug)) {
+            abort(404);
         }
-        abort(404);
+
+        if ($request->user()->can('delete-article', $article)) {
+            $article->delete();
+        }
+        return $this->respondSuccess();
     }
 
     /**
@@ -145,8 +144,7 @@ class ArticleController extends Controller
      */
     public function feed()
     {
-        $following_ids = Auth::user()->following->pluck('id');
-        $articles = Article::whereIn('author_id', $following_ids)->get();
+        $articles = $this->paginate(Auth::user()->feed());
         return ArticleResource::collection($articles);
     }
 

@@ -61,11 +61,9 @@ class Handler extends ExceptionHandler
         if ($e instanceof ValidationException) {
             $formattedErrors = [];
             foreach ($e->validator->errors()->getMessages() as $key => $messages) {
-                $arr = explode('.', $key);
-                $key = array_pop($arr);
+                $key = preg_replace('/[a-z]+\./', '', $key);
                 $formattedErrors[$key] = array_map(function ($msg) {
-                    // return preg_replace('/ [a-zA-Z ]+\.([a-z]+)/', ' ${1}', $msg);
-                    return remove_words($msg, 2);
+                    return preg_replace('/The [a-zA-Z ]+\.([a-z]+)/', '', $msg);
                 }, $messages);
             }
             return response()->json(['errors' => $formattedErrors], 422);

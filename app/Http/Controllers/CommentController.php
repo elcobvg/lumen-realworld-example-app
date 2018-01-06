@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use App\Helpers\GetsResources;
 use App\Http\Resources\CommentResource;
+use App\Http\Controllers\Helpers\GetsResources;
 
 class CommentController extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Http\Controllers\Helpers;
 
 use App\Models\User;
 use App\Models\Article;
