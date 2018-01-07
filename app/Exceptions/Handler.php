@@ -63,7 +63,7 @@ class Handler extends ExceptionHandler
             foreach ($e->validator->errors()->getMessages() as $key => $messages) {
                 $key = preg_replace('/[a-z]+\./', '', $key);
                 $formattedErrors[$key] = array_map(function ($msg) {
-                    return preg_replace('/The [a-zA-Z ]+\.([a-z]+)/', '', $msg);
+                    return preg_replace('/The [a-zA-Z ]+\.([a-z]+) /', '', $msg);
                 }, $messages);
             }
             return response()->json(['errors' => $formattedErrors], 422);
