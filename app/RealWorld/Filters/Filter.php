@@ -4,6 +4,7 @@ namespace App\RealWorld\Filters;
 
 use ReflectionClass;
 use Illuminate\Http\Request;
+use Jenssegers\Mongodb\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 abstract class Filter
@@ -60,12 +61,12 @@ abstract class Filter
     /**
      * Apply all the requested filters if available.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param \Jenssegers\Mongodb\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function apply(Collection $collection)
+    public function apply(Builder $builder)
     {
-        $this->collection = $collection;
+        $this->collection = $builder->latest()->get();
 
         foreach ($this->getFilters() as $name => $value) {
             if (method_exists($this, $name)) {

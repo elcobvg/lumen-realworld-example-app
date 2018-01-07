@@ -51,18 +51,4 @@ class Controller extends BaseController
     {
         return $this->respond(null, 204);
     }
-
-    /**
-     * Respond with failed login.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondFailedLogin()
-    {
-        return $this->respond([
-            'errors' => [
-                'email or password' => ['is invalid'],
-            ]
-        ], 422);
-    }
 }

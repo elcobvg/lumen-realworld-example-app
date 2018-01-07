@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\LoginUser;
-use App\Http\Requests\RegisterUser;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Validators\ValidatesAuthenticationRequests;
@@ -51,5 +49,19 @@ class AuthController extends Controller
         ]);
 
         return new UserResource($user);
+    }
+
+    /**
+     * Respond with failed login.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondFailedLogin()
+    {
+        return $this->respond([
+            'errors' => [
+                'email or password' => ['is invalid'],
+            ]
+        ], 422);
     }
 }
