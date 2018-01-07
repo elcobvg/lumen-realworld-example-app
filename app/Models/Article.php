@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
 use App\RealWorld\Slug\HasSlug;
+use App\RealWorld\Filters\Filterable;
 use App\RealWorld\Favorite\Favoritable;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class Article extends Model
 {
-    use HasSlug, Favoritable;
+    use Favoritable, Filterable, HasSlug;
 
     /**
      * The attributes that are mass assignable.

@@ -11,28 +11,20 @@ use App\RealWorld\Paginate\Paginator;
 use App\Http\Resources\ArticleResource;
 use App\RealWorld\Filters\ArticleFilter;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Controllers\Helpers\GetsResources;
+use App\Http\Controllers\Concerns\GetsResources;
 use App\Http\Validators\ValidatesArticleRequests;
 
 class ArticleController extends Controller
 {
     use GetsResources, ValidatesArticleRequests;
 
-    /** \App\RealWorld\Filters\ArticleFilter
-     *
-     * @var null
-     */
-    protected $filter;
-
     /**
      * ArticleController constructor.
      *
      * @param ArticleFilter $filter
      */
-    public function __construct(ArticleFilter $filter)
+    public function __construct()
     {
-        $this->filter = $filter;
-
         $this->middleware('auth', ['except' => [
             'index',
             'show',
@@ -49,9 +41,9 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ArticleFilter $filter)
     {
-        $articles = $this->paginate(Article::all());
+        $articles = $this->paginate(Article::filter($filter));
         return ArticleResource::collection($articles);
     }
 
@@ -203,7 +195,7 @@ class ArticleController extends Controller
      */
     protected function paginate(Collection $collection)
     {
-        $paginator = new Paginator($this->filter->apply($collection));
+        $paginator = new Paginator($collection);
         return $paginator->get();
     }
 }

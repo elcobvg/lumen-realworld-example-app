@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProfileResource;
-use App\Http\Controllers\Helpers\GetsResources;
+use App\Http\Controllers\Concerns\GetsResources;
 
 class ProfileController extends Controller
 {

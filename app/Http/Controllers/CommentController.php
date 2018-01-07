@@ -6,7 +6,7 @@ use Auth;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Resources\CommentResource;
-use App\Http\Controllers\Helpers\GetsResources;
+use App\Http\Controllers\Concerns\GetsResources;
 
 class CommentController extends Controller
 {

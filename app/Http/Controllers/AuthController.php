@@ -50,4 +50,18 @@ class AuthController extends Controller
 
         return new UserResource($user);
     }
+
+    /**
+     * Respond with failed login.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondFailedLogin()
+    {
+        return $this->respond([
+            'errors' => [
+                'email or password' => ['is invalid'],
+            ]
+        ], 422);
+    }
 }
