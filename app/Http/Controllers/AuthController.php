@@ -48,7 +48,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->input('user.password')),
         ]);
 
-        return new UserResource($user);
+        return $this->respondCreated(new UserResource($user));
     }
 
     /**

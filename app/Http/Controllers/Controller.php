@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Validator;
+use App\RealWorld\Paginate\Paginator;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -18,7 +20,7 @@ class Controller extends BaseController
      */
     protected function respond($data, $statusCode = 200, $headers = [])
     {
-        return response()->json($data, $statusCode, $headers);
+        return response($data, $statusCode, $headers);
     }
 
     /**
@@ -28,7 +30,7 @@ class Controller extends BaseController
      */
     protected function respondSuccess()
     {
-        return $this->respond(null);
+        return $this->respond(null, 204);
     }
 
     /**
@@ -43,12 +45,14 @@ class Controller extends BaseController
     }
 
     /**
-     * Respond with no content.
+     * Paginate and filter a collection of items
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Collection $collection
+     * @return Collection
      */
-    protected function respondNoContent()
+    protected function paginate(Collection $collection)
     {
-        return $this->respond(null, 204);
+        $paginator = new Paginator($collection);
+        return $paginator->get();
     }
 }

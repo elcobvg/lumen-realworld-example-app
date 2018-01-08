@@ -6,11 +6,11 @@ use Auth;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Resources\CommentResource;
-use App\Http\Controllers\Concerns\GetsResources;
+use App\Http\Controllers\Concerns\GetsArticles;
 
 class CommentController extends Controller
 {
-    use GetsResources;
+    use GetsArticles;
 
     /**
      * CommentController constructor.
@@ -53,8 +53,9 @@ class CommentController extends Controller
             'body' => $request->input('comment.body'),
             'author_id' => Auth::user()->id,
         ]);
+        $comment = $article->comments->pop();
 
-        return new CommentResource($article->comments->pop());
+        return  $this->respondCreated(new CommentResource($comment));
     }
 
     /**
@@ -70,7 +71,11 @@ class CommentController extends Controller
         $article = $this->getArticleBySlug($slug);
         $comment = $article->comments()->firstWhere('id', $id);
 
-        if ($request->user()->can('delete-comment', $comment) && $comment->delete()) {
+        if ($request->user()->cannot('delete-comment', $comment)) {
+            abort(401);
+        }
+
+        if ($comment->delete()) {
             return $this->respondSuccess();
         }
     }

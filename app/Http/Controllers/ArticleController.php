@@ -7,16 +7,14 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
-use App\RealWorld\Paginate\Paginator;
 use App\Http\Resources\ArticleResource;
 use App\RealWorld\Filters\ArticleFilter;
-use Illuminate\Database\Eloquent\Collection;
-use App\Http\Controllers\Concerns\GetsResources;
+use App\Http\Controllers\Concerns\GetsArticles;
 use App\Http\Validators\ValidatesArticleRequests;
 
 class ArticleController extends Controller
 {
-    use GetsResources, ValidatesArticleRequests;
+    use GetsArticles, ValidatesArticleRequests;
 
     /**
      * ArticleController constructor.
@@ -72,8 +70,7 @@ class ArticleController extends Controller
                 $article->tags()->attach(new Tag(['name' => $name]));
             }
         }
-
-        return new ArticleResource($article);
+        return $this->respondCreated(new ArticleResource($article));
     }
 
     /**
@@ -103,9 +100,10 @@ class ArticleController extends Controller
 
         if ($request->has('article')) {
             $article = $this->getArticleBySlug($slug);
-            if ($request->user()->can('update-article', $article)) {
-                $article->update($request->get('article'));
+            if ($request->user()->cannot('update-article', $article)) {
+                abort(401);
             }
+            $article->update($request->get('article'));
         }
         return new ArticleResource($article);
     }
@@ -153,7 +151,6 @@ class ArticleController extends Controller
         if ($request->user()->can('favorite-article', $article)) {
             $request->user()->favorite($article);
         }
-
         return new ArticleResource($article);
     }
 
@@ -179,23 +176,9 @@ class ArticleController extends Controller
      */
     public function tags()
     {
-        $tags_raw = Article::all()->pluck('tags');
-        $names = $tags_raw->flatMap(function ($values) {
-            return $values->pluck('name');
-        });
+        $names = Article::distinct('tags')->get()->pluck('name');
         $tags = $names->unique()->sort()->values()->all();
-        return $this->respond(['tags' => $tags]);
-    }
 
-    /**
-     * Paginate and filter the article collection
-     *
-     * @param  Collection $collection
-     * @return Collection
-     */
-    protected function paginate(Collection $collection)
-    {
-        $paginator = new Paginator($collection);
-        return $paginator->get();
+        return $this->respond(['tags' => $tags]);
     }
 }

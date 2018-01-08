@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProfileResource;
-use App\Http\Controllers\Concerns\GetsResources;
 
 class ProfileController extends Controller
 {
-    use GetsResources;
-    
+
     /**
      * ProfileController constructor.
      *
@@ -59,5 +58,15 @@ class ProfileController extends Controller
         $user = $this->getUserByName($username);
         Auth::user()->unFollow($user);
         return new ProfileResource($user);
+    }
+
+    /**
+     * Retrieve user by their username
+     * @param  string $username
+     * @return \App\Models\User
+     */
+    protected function getUserByName(string $username)
+    {
+        return User::whereUsername($username)->first();
     }
 }

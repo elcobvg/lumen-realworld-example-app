@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Concerns;
 
-use App\Models\User;
 use App\Models\Article;
 
-trait GetsResources
+trait GetsArticles
 {
     /**
      * Retrieve article by its slug
@@ -15,15 +14,5 @@ trait GetsResources
     protected function getArticleBySlug(string $slug)
     {
         return Article::where('slug', $slug)->first();
-    }
-
-    /**
-     * Retrieve user by their username
-     * @param  string $username
-     * @return \App\Models\User
-     */
-    protected function getUserByName(string $username)
-    {
-        return User::whereUsername($username)->first();
     }
 }
