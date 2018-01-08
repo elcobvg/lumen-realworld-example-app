@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Validator;
-use App\RealWorld\Paginate\Paginator;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -47,12 +46,21 @@ class Controller extends BaseController
     /**
      * Paginate and filter a collection of items
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int $offset
      * @param  Collection $collection
      * @return Collection
      */
-    protected function paginate(Collection $collection)
+    protected function paginate(Collection $collection, $offset = 0)
     {
-        $paginator = new Paginator($collection);
-        return $paginator->get();
+        if (sizeof($collection)) {
+            $offset = app('request')->get('offset', $offset);
+            $limit = app('request')->get('limit', $collection->first()->getPerPage());
+
+            if (app('request')->has('offset')) {
+                $collection = $collection->slice($offset, $limit)->values();
+            }
+        }
+        return $collection;
     }
 }
