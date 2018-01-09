@@ -9,7 +9,6 @@ trait Favoritable
 {
     /**
      * Check if the authenticated user has favorited the article.
-     * We make use of lazy loading if the relationship is not already loaded.
      *
      * @return bool
      */
@@ -31,7 +30,6 @@ trait Favoritable
         if (array_key_exists('favorited_count', $this->getAttributes())) {
             return $this->favorited_count;
         }
-
         return $this->favorited()->count();
     }
 

@@ -70,7 +70,9 @@ class ArticleController extends Controller
                 $article->tags()->attach(new Tag(['name' => $name]));
             }
         }
-        return (new ArticleResource($article))->response()->header('Status', 201);
+        return (new ArticleResource($article))
+                ->response()
+                ->header('Status', 201);
     }
 
     /**
@@ -81,9 +83,7 @@ class ArticleController extends Controller
      */
     public function show(string $slug)
     {
-        if (! $article = $this->getArticleBySlug($slug)) {
-            abort(404);
-        }
+        $article = $this->getArticleBySlug($slug);
         return new ArticleResource($article);
     }
 
@@ -117,10 +117,7 @@ class ArticleController extends Controller
      */
     public function destroy(Request $request, string $slug)
     {
-        if (! $article = $this->getArticleBySlug($slug)) {
-            abort(404);
-        }
-
+        $article = $this->getArticleBySlug($slug);
         if ($request->user()->cannot('delete-article', $article)) {
             abort(403);
         }

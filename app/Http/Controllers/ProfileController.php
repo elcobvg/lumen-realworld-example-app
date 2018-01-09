@@ -28,9 +28,7 @@ class ProfileController extends Controller
      */
     public function show($username)
     {
-        if (! $user = $this->getUserByName($username)) {
-            abort(404);
-        }
+        $user = $this->getUserByName($username);
         return new ProfileResource($user);
     }
 
@@ -42,10 +40,7 @@ class ProfileController extends Controller
      */
     public function follow(string $username)
     {
-        if (! $user = $this->getUserByName($username)) {
-            abort(404, "User ${username} not found");
-        }
-        
+        $user = $this->getUserByName($username);
         Auth::user()->follow($user);
         return new ProfileResource($user);
     }
@@ -58,10 +53,7 @@ class ProfileController extends Controller
      */
     public function unFollow(string $username)
     {
-        if (! $user = $this->getUserByName($username)) {
-            abort(404, "User ${username} not found");
-        }
-
+        $user = $this->getUserByName($username);
         Auth::user()->unFollow($user);
         return new ProfileResource($user);
     }
@@ -73,6 +65,9 @@ class ProfileController extends Controller
      */
     protected function getUserByName(string $username)
     {
-        return User::whereUsername($username)->first();
+        if (! $user = User::whereUsername($username)->first()) {
+            abort(404, "User ${username} not found");
+        }
+        return $user;
     }
 }

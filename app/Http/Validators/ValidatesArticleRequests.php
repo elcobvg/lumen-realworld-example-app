@@ -15,10 +15,10 @@ trait ValidatesArticleRequests
     protected function validateNew(Request $request)
     {
         $this->validate($request, [
-            'article.title' => 'required|string|max:255',
-            'article.description' => 'required|string|max:255',
-            'article.body' => 'required|string',
-            'article.tagList' => 'sometimes|array',
+            'article.title'         => 'required|string|max:255',
+            'article.description'   => 'required|string|max:255',
+            'article.body'          => 'required|string',
+            'article.tagList'       => 'sometimes|array',
         ]);
     }
 
@@ -31,9 +31,9 @@ trait ValidatesArticleRequests
     protected function validateUpdate(Request $request)
     {
         $this->validate($request, [
-            'article.title' => 'sometimes|string|max:255',
-            'article.description' => 'sometimes|string|max:255',
-            'article.body' => 'sometimes|string',
+            'article.title'         => 'sometimes|string|max:255',
+            'article.description'   => 'sometimes|string|max:255',
+            'article.body'          => 'sometimes|string',
         ]);
     }
 }

@@ -41,7 +41,6 @@ class UserController extends Controller
         $this->validateUpdate($request);
 
         $user = Auth::user();
-
         if ($request->has('user')) {
             $user->update($request->get('user'));
         }

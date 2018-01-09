@@ -22,10 +22,10 @@ trait ValidatesUserRequests
         
         $this->validate($request, [
             'user.username' => 'sometimes|max:50|alpha_num|unique:username',
-            'user.email' => $email_rule,
+            'user.email'    => $email_rule,
             'user.password' => 'sometimes|min:8',
-            'user.bio' => 'sometimes|nullable|max:255',
-            'user.image' => 'sometimes|nullable|url',
+            'user.bio'      => 'sometimes|nullable|max:255',
+            'user.image'    => 'sometimes|nullable|url',
         ]);
     }
 }

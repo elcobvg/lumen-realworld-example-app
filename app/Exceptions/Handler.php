@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
 
             return response()->json((
                 ['errors' => [
-                    'status' => $e->getStatusCode(),
+                    // 'status' => $e->getStatusCode(),
                     'message' => $message,
                 ]
                 ]), $e->getStatusCode());
@@ -70,7 +70,11 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof Exception) {
-            return response()->json(['errors' => [class_basename($e) => $e->getMessage()]], 500);
+            return response()->json([
+                'errors' => [
+                    class_basename($e) => $e->getMessage()
+                ]
+            ], 500);
         }
     }
 }
