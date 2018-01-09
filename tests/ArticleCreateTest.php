@@ -35,13 +35,7 @@ class ArticleCreateTest extends TestCase
                 ]
         ]);
         $response->seeJsonContains(['title' => 'test title']);
-        $response->seeJsonContains(['author' => [
-                        'username' => $this->loggedInUser->username,
-                        'bio' => $this->loggedInUser->bio,
-                        'image' => $this->loggedInUser->image,
-                        'following' => false,
-                    ]
-                ]);
+        $response->seeJsonContains(['username' => $this->loggedInUser->username]);
     }
 
     /** @test */
