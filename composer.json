@@ -11,7 +11,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "barryvdh/laravel-cors": "^0.10.0",
         "jenssegers/mongodb": "^3.3",
         "laravel/lumen-framework": "5.5.*",
