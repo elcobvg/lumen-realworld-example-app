@@ -1,11 +1,7 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-
 class LoginTest extends TestCase
 {
-    // use DatabaseMigrations;
-
     /** @test */
     public function it_returns_a_user_with_valid_token_on_valid_login()
     {
@@ -18,22 +14,29 @@ class LoginTest extends TestCase
 
         $response = $this->json('POST', '/api/users/login', $data);
 
-        $response->assertResponseStatus(200);
-        $response->seeJsonEquals([
+        $response->assertResponseOk();
+        $response->seeJsonStructure([
             'user' => [
-                'email' => $this->user->email,
-                'token' => $this->user->token,
-                'username' => $this->user->username,
-                'bio' => $this->user->bio,
-                'image' => $this->user->image,
+                'bio',
+                'email',
+                'image',
+                'token',
+                'username',
             ]
         ]);
 
-        $this->assertArrayHasKey('token', $response->json()['user'], 'Token not found');
+        $response->seeJsonContains(['bio' => $this->user->bio]);
+        $response->seeJsonContains(['email' => $this->user->email]);
+        $response->seeJsonContains(['image' => $this->user->image]);
+        $response->seeJsonContains(['username' => $this->user->username]);
+
+        $responseData = $this->getResponseData();
+
+        $this->assertArrayHasKey('token', $responseData['user'], 'Token not found');
 
         $this->assertTrue(
-            (count(explode('.', $response->json()['user']['token'])) === 3),
-             'Failed to validate token'
+            (count(explode('.', $responseData['user']['token'])) === 3),
+            'Failed to validate token'
         );
     }
 

@@ -1,8 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 class HomePageTest extends TestCase
 {
     /**
@@ -15,7 +12,8 @@ class HomePageTest extends TestCase
         $this->get('/');
 
         $this->assertEquals(
-            file_get_contents(__DIR__ . '/../readme.md'), $this->response->getContent()
+            file_get_contents(__DIR__ . '/../readme.md'),
+            $this->response->getContent()
         );
     }
 }

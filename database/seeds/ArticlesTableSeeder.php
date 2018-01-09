@@ -14,6 +14,7 @@ class ArticlesTableSeeder extends Seeder
         factory(App\Models\Article::class, 25)->create()->each(function ($article) {
 
             $faker = Faker\Factory::create();
+            gc_collect_cycles();
 
             $authors = App\Models\User::all();
             $author = $authors[$faker->numberBetween(0, sizeof($authors) - 1)];

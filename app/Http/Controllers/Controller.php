@@ -33,17 +33,6 @@ class Controller extends BaseController
     }
 
     /**
-     * Respond with created.
-     *
-     * @param $data
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondCreated($data)
-    {
-        return $this->respond($data, 201);
-    }
-
-    /**
      * Paginate and filter a collection of items
      *
      * @param  \Illuminate\Http\Request  $request

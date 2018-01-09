@@ -55,7 +55,7 @@ class CommentController extends Controller
         ]);
         $comment = $article->comments->pop();
 
-        return  $this->respondCreated(new CommentResource($comment));
+        return (new CommentResource($comment))->response()->header('Status', 201);
     }
 
     /**

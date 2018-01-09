@@ -70,7 +70,7 @@ class ArticleController extends Controller
                 $article->tags()->attach(new Tag(['name' => $name]));
             }
         }
-        return $this->respondCreated(new ArticleResource($article));
+        return (new ArticleResource($article))->response()->header('Status', 201);
     }
 
     /**
@@ -121,9 +121,11 @@ class ArticleController extends Controller
             abort(404);
         }
 
-        if ($request->user()->can('delete-article', $article)) {
-            $article->delete();
+        if ($request->user()->cannot('delete-article', $article)) {
+            abort(403);
         }
+        
+        $article->delete();
         return $this->respondSuccess();
     }
 

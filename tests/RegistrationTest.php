@@ -1,38 +1,30 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-
 class RegistrationTest extends TestCase
 {
-    // use DatabaseMigrations;
-
     /** @test */
     public function it_returns_user_with_token_on_valid_registration()
     {
+        $user = factory('App\Models\User')->make();
         $data = [
             'user' => [
-                'username' => 'test',
-                'email' => 'test@test.com',
-                'password' => 'secret',
+                'username' => $user->username,
+                'email' => $user->email,
+                'password' => $user->password,
             ]
         ];
 
         $response = $this->json('POST', '/api/users', $data);
 
-        $response->assertResponseStatus(200);
-        /*
-        $response->assertJson([
+        $response->assertResponseStatus(201);
+        $response->seeJsonStructure([
             'user' => [
-                'email' => 'test@test.com',
-                'token' => $this->user->token,
-                'username' => 'test',
-                'bio' => null,
-                'image' => null,
+                'email',
+                'username',
             ]
         ]);
-        */
 
-        $this->assertArrayHasKey('token', $response->json()['user'], 'Token not found');
+        $this->assertArrayHasKey('token', $this->getResponseData()['user'], 'Token not found');
     }
 
     /** @test */
@@ -43,7 +35,7 @@ class RegistrationTest extends TestCase
         $response = $this->json('POST', '/api/users', $data);
 
         $response->assertResponseStatus(422);
-        $response->assertJson([
+        $response->seeJsonEquals([
                 'errors' => [
                     'username' => ['field is required.'],
                     'email' => ['field is required.'],
@@ -66,11 +58,11 @@ class RegistrationTest extends TestCase
         $response = $this->json('POST', '/api/users', $data);
 
         $response->assertResponseStatus(422);
-        $response->assertJson([
+        $response->seeJsonEquals([
                 'errors' => [
                     'username' => ['may only contain letters and numbers.'],
                     'email' => ['must be a valid email address.'],
-                    'password' => ['must be at least 6 characters.'],
+                    'password' => ['must be at least 8 characters.'],
                 ]
             ]);
     }
@@ -82,14 +74,14 @@ class RegistrationTest extends TestCase
             'user' => [
                 'username' => $this->user->username,
                 'email' => $this->user->email,
-                'password' => 'secret',
+                'password' => $this->user->password,
             ]
         ];
 
         $response = $this->json('POST', '/api/users', $data);
 
         $response->assertResponseStatus(422);
-        $response->assertJson([
+        $response->seeJsonEquals([
                 'errors' => [
                     'username' => ['has already been taken.'],
                     'email' => ['has already been taken.'],
