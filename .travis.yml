@@ -6,6 +6,9 @@ php:
 services:
   - mongodb
 
+before_install: 
+  - echo "extension = mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 before_script:
   - cp .env.travis .env
   - composer self-update
