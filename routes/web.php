@@ -11,10 +11,9 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+$router->get('/', function () {
     return response(file_get_contents(__DIR__ . '/../readme.md'))
             ->header('Content-Type', 'text/plain');
-    ;
 });
 
 // Generate random string
