@@ -31,7 +31,7 @@ class CommentResource extends Resource
                 'username'  => $this->author->username,
                 'bio'       => $this->author->bio,
                 'image'     => $this->author->image,
-                'following' => !! $this->author->following,
+                'following' => $this->author->following,
             ]
         ];
     }
@@ -48,6 +48,7 @@ class CommentResource extends Resource
         if ($collection->count() > 1) {
             return [Str::plural(self::$wrap) => $collection];
         }
+        // This is according to API specs, but Postman collection gives an error:
         return [self::$wrap => $collection->first()];
     }
 }

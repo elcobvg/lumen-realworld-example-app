@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
             return response()->json(['errors' => $formattedErrors], 422);
         }
 
-        if ($e instanceof Exception) {
+        if ($e instanceof Exception && ! env('APP_DEBUG')) {
             return response()->json([
                 'errors' => [
                     class_basename($e) => $e->getMessage()

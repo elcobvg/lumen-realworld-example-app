@@ -30,7 +30,7 @@ trait Favoritable
         if (array_key_exists('favorited_count', $this->getAttributes())) {
             return $this->favorited_count;
         }
-        return $this->favorited()->count();
+        return $this->favoritedBy()->count();
     }
 
     /**
@@ -38,7 +38,7 @@ trait Favoritable
      *
      * @return \Jenssegers\Mongodb\Relations\BelongsToMany
      */
-    public function favorited()
+    public function favoritedBy()
     {
         return $this->belongsToMany(User::class, null, 'favorite_article_ids', 'favorited_by_ids');
     }
@@ -51,6 +51,6 @@ trait Favoritable
      */
     public function isFavoritedBy(User $user)
     {
-        return !! $this->favorited()->where('favorited_by_ids', $user->id)->count();
+        return !! $this->favoritedBy()->where('favorited_by_ids', $user->id)->count();
     }
 }

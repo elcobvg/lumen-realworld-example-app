@@ -2,6 +2,7 @@
 
 namespace App\RealWorld\Favorite;
 
+use Auth;
 use App\Models\Article;
 
 trait HasFavorite
@@ -15,7 +16,7 @@ trait HasFavorite
     public function favorite(Article $article)
     {
         if (! $this->hasFavorited($article)) {
-            return $this->favorites()->attach($article);
+            $this->favorites()->attach($article);
         }
     }
 
@@ -27,7 +28,8 @@ trait HasFavorite
      */
     public function unFavorite(Article $article)
     {
-        return $this->favorites()->detach($article);
+        $article->favoritedBy()->detach(Auth::user());
+        $this->favorites()->detach($article);
     }
 
     /**

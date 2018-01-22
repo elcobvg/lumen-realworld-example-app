@@ -25,7 +25,7 @@ class ProfileResource extends Resource
             'username'  => $this->username,
             'bio'       => $this->bio,
             'image'     => $this->image,
-            'following' => $this->getFollowingAttribute(),
+            'following' => $this->following,
         ];
     }
 }

@@ -29,7 +29,7 @@ trait Followable
     public function follow(User $user)
     {
         if ($this->id != $user->id) {
-            return $this->following()->attach($user);
+            $this->follows()->attach($user);
         }
     }
 
@@ -41,7 +41,8 @@ trait Followable
      */
     public function unFollow(User $user)
     {
-        return $this->following()->detach($user);
+        $user->followers()->detach(Auth::user());
+        $this->follows()->detach($user);
     }
 
     /**
@@ -49,7 +50,7 @@ trait Followable
      *
      * @return \Jenssegers\Mongodb\Relations\BelongsToMany
      */
-    public function following()
+    public function follows()
     {
         return $this->belongsToMany(User::class, null, 'follower_ids', 'following_ids');
     }
@@ -72,7 +73,7 @@ trait Followable
      */
     public function isFollowing(User $user)
     {
-        return !! $this->following()->where('following_ids', $user->id)->count();
+        return !! $this->follows()->where('following_ids', $user->id)->count();
     }
 
     /**
