@@ -16,7 +16,7 @@ trait HasFavorite
     public function favorite(Article $article)
     {
         if (! $this->hasFavorited($article)) {
-            $this->favorites()->attach($article);
+            $article->favoritedBy()->attach(Auth::user());
         }
     }
 
@@ -29,7 +29,6 @@ trait HasFavorite
     public function unFavorite(Article $article)
     {
         $article->favoritedBy()->detach(Auth::user());
-        $this->favorites()->detach($article);
     }
 
     /**

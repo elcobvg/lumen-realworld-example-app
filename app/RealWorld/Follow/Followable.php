@@ -29,7 +29,7 @@ trait Followable
     public function follow(User $user)
     {
         if ($this->id != $user->id) {
-            $this->follows()->attach($user);
+            $user->followers()->attach(Auth::user());
         }
     }
 
@@ -42,7 +42,6 @@ trait Followable
     public function unFollow(User $user)
     {
         $user->followers()->detach(Auth::user());
-        $this->follows()->detach($user);
     }
 
     /**
