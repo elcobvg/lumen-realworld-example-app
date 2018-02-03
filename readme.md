@@ -53,7 +53,7 @@ Run the database migrations (**Set the database connection in .env before migrat
 
 Start the local development server
 
-    php artisan serve
+    php -S localhost:8000 -t public
 
 You can now access the server at http://localhost:8000
 
@@ -69,7 +69,7 @@ You can now access the server at http://localhost:8000
 **Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
 
     php artisan migrate
-    php artisan serve
+    php -S localhost:8000 -t public
 
 ## Database seeding
 
