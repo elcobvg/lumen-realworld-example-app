@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\Validator;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -35,9 +33,8 @@ class Controller extends BaseController
     /**
      * Paginate and filter a collection of items
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int $offset
-     * @param  Collection $collection
+     * @param Collection $collection
+     * @param int $offset
      * @return Collection
      */
     protected function paginate(Collection $collection, $offset = 0)

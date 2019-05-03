@@ -31,6 +31,7 @@ class Handler extends ExceptionHandler
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
      * @param  \Exception  $e
+     * @throws \Exception
      * @return void
      */
     public function report(Exception $e)
