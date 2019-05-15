@@ -1,12 +1,10 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-try {
-    (new Dotenv\Dotenv(__DIR__.'/../'))->load();
-} catch (Dotenv\Exception\InvalidPathException $e) {
-    //
-}
+(new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
+    dirname(__DIR__)
+))->bootstrap();
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +18,7 @@ try {
 */
 
 $app = new Laravel\Lumen\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
 
 $app->withFacades();
@@ -81,7 +79,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\JwtServiceProvider::class);
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
-$app->register(Barryvdh\Cors\LumenServiceProvider::class);
+$app->register(Barryvdh\Cors\ServiceProvider::class);
 
 $app->withEloquent();
 
@@ -99,7 +97,7 @@ $app->withEloquent();
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;
