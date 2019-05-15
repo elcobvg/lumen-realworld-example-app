@@ -13,9 +13,6 @@ trait GetsArticles
      */
     protected function getArticleBySlug(string $slug)
     {
-        if (! $article = Article::where('slug', $slug)->first()) {
-            abort(404);
-        }
-        return $article;
+        return Article::where('slug', $slug)->firstOrFail();
     }
 }

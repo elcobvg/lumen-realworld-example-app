@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Resources\ProfileResource;
 
 class ProfileController extends Controller
