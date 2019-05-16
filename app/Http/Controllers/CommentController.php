@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Resources\CommentResource;
 use App\Http\Controllers\Concerns\GetsArticles;
